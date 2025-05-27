@@ -1,90 +1,133 @@
-let apiKey = "e25ddb66337bc8c7f6c572ffe0527d30";
-let apiUrl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
-let forecastApiBase = "https://api.openweathermap.org/data/2.5/forecast?units=metric&";
+const apiKey = "e25ddb66337bc8c7f6c572ffe0527d30";
+const apiUrl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+const forecastApiBase = "https://api.openweathermap.org/data/2.5/forecast?units=metric&";
 
-let searchInput = document.getElementById("search_input");
-let searchButton = document.getElementById("search_btn");
-
-document.getElementById("darkMode_btn").addEventListener("click", () => {
-    document.body.classList.add("dark-mode");
-    document.body.classList.remove("light-mode");
-});
-
-document.getElementById("lightMode_btn").addEventListener("click", () => {
-    document.body.classList.remove("dark-mode");
-    document.body.classList.add("light-mode");
-});
+const searchInput = document.getElementById("search_input");
+const searchButton = document.getElementById("search_btn");
+const videoBg = document.getElementById("bgVideo");
+const weatherImg = document.getElementById("weatherImg");
 
 let currentTempCelsius = null;
 
 searchButton.addEventListener("click", async () => {
-    let city = searchInput.value.trim();
-    if (city !== "") {
-        await getWeather(city);
-    }
+  const city = searchInput.value.trim();
+  if (city !== "") {
+    await getWeather(city);
+  }
 });
 
+window.addEventListener("load", () => {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(async (pos) => {
+      const { latitude, longitude } = pos.coords;
+      await getWeatherByCoords(latitude, longitude);
+    }, (err) => {
+      console.warn("Geolocation error:", err.message);
+    });
+  }
+});
+
+async function getWeatherByCoords(lat, lon) {
+  const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`;
+  const response = await fetch(url);
+  const data = await response.json();
+  await renderWeather(data);
+  await getForecast(lat, lon);
+}
+
 async function getWeather(city) {
-    try {
-        let response = await fetch(`${apiUrl}${city}&appid=${apiKey}`);
-        let data = await response.json();
+  const response = await fetch(`${apiUrl}${city}&appid=${apiKey}`);
+  const data = await response.json();
 
-        if (data.cod !== 200) throw new Error(data.message);
+  if (data.cod !== 200) {
+    alert("City not found");
+    return;
+  }
 
-        document.querySelector('.card-title').innerHTML = data.name;
-        currentTempCelsius = Math.round(data.main.temp);
-        document.querySelector('.temp_display').innerHTML = `${currentTempCelsius}°C`;
-        document.querySelector('.card-text').innerHTML = data.weather[0].description;
+  await renderWeather(data);
+  await getForecast(data.coord.lat, data.coord.lon);
+}
 
-        let weatherImg = document.getElementById("weatherImg");
-        if (currentTempCelsius < 0) weatherImg.src = 'img/freez.jpg';
-        else if (currentTempCelsius < 10) weatherImg.src = 'img/cold.jpg';
-        else if (currentTempCelsius < 20) weatherImg.src = 'img/cool.jpg';
-        else if (currentTempCelsius < 30) weatherImg.src = 'img/warm.jpg';
-        else weatherImg.src = 'img/hot.jpg';
+function updateVideoBackground(temp) {
+  let video = "";
+  if (temp < 0) {
+    video = "videos/bgfreez.mp4";
+  } else if (temp < 10) {
+    video = "videos/bgcold.mp4";
+  } else if (temp < 20) {
+    video = "videos/bgwarm.mp4";
+  } else if (temp < 30) {
+    video = "videos/bgwarm.mp4";
+  } else {
+    video = "videos/bgfreez.mp4";
+  }
+  videoBg.src = video;
+}
 
-        document.getElementById("degree_celsius").onclick = () => {
-            document.querySelector('.temp_display').innerHTML = `${currentTempCelsius}°C`;
-        };
+function updateWeatherImage(temp) {
+  let imgSrc = "img/default.jpg"; // fallback default
 
-        document.getElementById("fahreinheit").onclick = () => {
-            let f = (currentTempCelsius * 9 / 5) + 32;
-            document.querySelector('.temp_display').innerHTML = `${f.toFixed(2)}°F`;
-        };
+  if (temp < 0) {
+    imgSrc = "img/cold.jpg";  // add suitable images in your img folder
+  } else if (temp < 10) {
+    imgSrc = "img/warm.jpg";
+  } else if (temp < 20) {
+    imgSrc = "img/cold.jpg";
+  } else if (temp < 30) {
+    imgSrc = "img/warm.jpg";
+  } else {
+    imgSrc = "img/cold.jpg";
+  }
 
-        await getForecast(data.coord.lat, data.coord.lon);
-    } catch (err) {
-        alert("City not found or API error: " + err.message);
-    }
+  weatherImg.src = imgSrc;
+}
+
+async function renderWeather(data) {
+  document.querySelector(".card-title").textContent = data.name;
+  currentTempCelsius = Math.round(data.main.temp);
+  document.querySelector(".temp_display").textContent = `${currentTempCelsius}°C`;
+  document.querySelector(".card-text").textContent = data.weather[0].description;
+
+  updateVideoBackground(currentTempCelsius);
+  updateWeatherImage(currentTempCelsius);
+
+  document.getElementById("degree_celsius").onclick = () => {
+    document.querySelector(".temp_display").textContent = `${currentTempCelsius}°C`;
+  };
+
+  document.getElementById("fahreinheit").onclick = () => {
+    const f = (currentTempCelsius * 9) / 5 + 32;
+    document.querySelector(".temp_display").textContent = `${f.toFixed(2)}°F`;
+  };
 }
 
 async function getForecast(lat, lon) {
-    let url = `${forecastApiBase}lat=${lat}&lon=${lon}&appid=${apiKey}`;
-    let res = await fetch(url);
-    let data = await res.json();
+  const res = await fetch(`${forecastApiBase}lat=${lat}&lon=${lon}&appid=${apiKey}`);
+  const data = await res.json();
 
-    let container = document.querySelector("#Future_data .row");
-    container.innerHTML = "";
-    let addedDays = new Set();
+  const container = document.querySelector("#Future_data .row");
+  container.innerHTML = "";
+  const addedDays = new Set();
 
-    for (let item of data.list) {
-        let date = new Date(item.dt * 1000);
-        let dayName = date.toLocaleDateString('en-US', { weekday: 'long' });
-        if (addedDays.has(dayName)) continue;
-        addedDays.add(dayName);
-        if (addedDays.size > 6) break;
+  for (let item of data.list) {
+    const date = new Date(item.dt * 1000);
+    const dayName = date.toLocaleDateString("en-US", { weekday: "long" });
 
-        let temp = Math.round(item.main.temp);
-        let icon = item.weather[0].icon;
-        let desc = item.weather[0].description;
+    if (addedDays.has(dayName)) continue;
+    addedDays.add(dayName);
+    if (addedDays.size > 6) break;
 
-        container.innerHTML += `
-            <div class="card">
-                <h5>${dayName}</h5>
-                <img src="https://openweathermap.org/img/wn/${icon}@2x.png" alt="">
-                <p>${temp}°C</p>
-                <p>${desc}</p>
-            </div>
-        `;
-    }
+    const temp = Math.round(item.main.temp);
+    const icon = item.weather[0].icon;
+    const desc = item.weather[0].description;
+
+    container.innerHTML += `
+      <div class="card">
+        <h5>${dayName}</h5>
+        <img src="https://openweathermap.org/img/wn/${icon}@2x.png" alt="">
+        <p>${temp}°C</p>
+        <p>${desc}</p>
+      </div>
+    `;
+  }
 }
