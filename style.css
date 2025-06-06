@@ -1,4 +1,4 @@
-* {
+/* * {
   box-sizing: border-box;
 }
 
@@ -25,10 +25,11 @@ body {
 
 .container {
   max-width: 900px; /* increased from 600px */
-  margin: auto;
+  /* margin: auto;
   padding: 20px;
   text-align: center;
   /* Transparent white background */
+  /*
   background: rgba(255, 255, 255, 0.4);
   border-radius: 10px;
   margin-top: 30px;
@@ -61,7 +62,7 @@ body {
 }
 
 .weather-card img {
-  width: 120px; /* slightly bigger */
+  width: 120px; /* slightly bigger *//*
   margin-bottom: 10px;
 }
 
@@ -84,7 +85,7 @@ body {
   background: rgba(255, 255, 255, 0.95);
   padding: 10px;
   border-radius: 10px;
-  width: 200px;  /* increased from 150px */
+  width: 200px;  /* increased from 150px *//*
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   text-align: center;
 }
@@ -94,6 +95,145 @@ body {
   font-weight: bold;
 }
 
+/* Mobile responsiveness *//*
+@media (max-width: 600px) {
+  .container {
+    width: 90%;
+  }
+
+  #Future_data .card {
+    width: 90%;  /* full width on mobile for easier viewing *//*
+  }
+
+  .search-bar input {
+    width: 60%;
+  }
+} */
+
+/* Reset and base styles */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  color: #000;
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Background video */
+#bgVideo {
+  position: fixed;
+  top: 0;
+  left: 0;
+  min-width: 100%;
+  min-height: 100%;
+  object-fit: cover;
+  z-index: -1;
+  opacity: 0.8;
+}
+
+/* Main container */
+.container {
+  max-width: 900px; /* increased from 600px */
+  margin: auto;
+  padding: 20px;
+  text-align: center;
+  /* Transparent white background */
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 10px;
+  margin-top: 30px;
+}
+
+/* Search bar */
+.search-bar {
+  margin: 20px 0;
+}
+
+.search-bar input {
+  padding: 10px;
+  width: 70%;
+  font-size: 1em;
+  border-radius: 5px;
+  border: 1px solid #aaa;
+}
+
+.search-bar button {
+  padding: 10px 15px;
+  font-size: 1em;
+  border-radius: 5px;
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+/* Main weather card */
+.weather-card {
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.weather-card img {
+  width: 120px; /* slightly bigger */
+  margin-bottom: 10px;
+}
+
+/* Unit toggle buttons */
+.unit-toggle button {
+  margin: 5px;
+  padding: 8px 12px;
+  font-size: 1em;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Forecast container row */
+#Future_data .row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* Forecast cards base style */
+#Future_data .card {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 10px;
+  border-radius: 10px;
+  width: 200px;  /* increased from 150px */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+/* First three cards in the first row */
+#Future_data .card.first-row {
+  flex: 0 0 calc(33.33% - 20px);
+}
+
+/* Next three cards in the second row */
+#Future_data .card.second-row {
+  flex: 0 0 calc(33.33% - 20px);
+}
+
+/* Forecast card heading */
+#Future_data .card h5 {
+  margin: 0 0 10px 0;
+  font-weight: bold;
+}
+
+/* Forecast card icons */
+#Future_data .card img {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+
 /* Mobile responsiveness */
 @media (max-width: 600px) {
   .container {
@@ -101,7 +241,8 @@ body {
   }
 
   #Future_data .card {
-    width: 90%;  /* full width on mobile for easier viewing */
+    width: 90%;
+    flex: 1 1 100% !important;
   }
 
   .search-bar input {

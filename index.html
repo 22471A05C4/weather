@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -7,7 +7,46 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Background Video -->
+  Background Video 
+  <video autoplay muted loop id="bgVideo"></video>
+
+  <div class="container">
+    <div class="search-bar">
+      <input type="text" id="search_input" placeholder="Enter city name">
+      <button id="search_btn">Search</button>
+    </div>
+
+    <div class="weather-card">
+      <h2 class="card-title">City Name</h2>
+      <img id="weatherImg" src="img/default.jpg" alt="Weather Image" />
+      <p class="temp_display">--°C</p>
+      <p class="card-text">Weather Description</p>
+      <div class="unit-toggle">
+        <button id="degree_celsius">°C</button>
+        <button id="fahreinheit">°F</button>
+      </div>
+    </div>
+
+    <h3>6-Day Forecast</h3>
+    <div id="Future_data">
+      <div class="row"></div>
+    </div>
+  </div>
+
+  <script src="index.js"></script>
+</body>
+</html -->
+
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Weather App</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
   <video autoplay muted loop id="bgVideo"></video>
 
   <div class="container">
