@@ -332,15 +332,15 @@ async function getWeather(city) {
 function updateVideoBackground(temp) {
   let video = "";
   if (temp < 0) {
-    video = "videos/bgfreez.mp4";
+    video = "bgfreez.mp4";
   } else if (temp < 10) {
-    video = "videos/bgcold.mp4";
+    video = "bgcold.mp4";
   } else if (temp < 20) {
-    video = "videos/bgwarm2.mp4";
+    video = "bgwarm2.mp4";
   } else if (temp < 30) {
-    video = "videos/bgveryhot.mp4";
+    video = "bgveryhot.mp4";
   } else {
-    video = "videos/bgveryhot.mp4";
+    video = "bgveryhot.mp4";
   }
   videoBg.src = video;
 }
@@ -349,15 +349,15 @@ function updateWeatherImage(temp) {
   let imgSrc = "img/default.jpg"; // fallback default
 
   if (temp < 0) {
-    imgSrc = "img/icon1.png";
+    imgSrc = "icon1.png";
   } else if (temp < 10) {
-    imgSrc = "img/icon2.png";
+    imgSrc = "icon2.png";
   } else if (temp < 20) {
-    imgSrc = "img/icon3.png";
+    imgSrc = "icon3.png";
   } else if (temp < 30) {
-    imgSrc = "img/icon4.png";
+    imgSrc = "icon4.png";
   } else {
-    imgSrc = "img/icon5.png";
+    imgSrc = "icon5.png";
   }
 
   weatherImg.src = imgSrc;
@@ -384,15 +384,15 @@ async function renderWeather(data) {
 
 function getIconByTemp(temp) {
   if (temp < 0) {
-    return "img/icon1.png";  // your cold icon/image
+    return "icon1.png";  // your cold icon/image
   } else if (temp < 10) {
-    return "img/icon2.png";  // your warm icon/image
+    return "icon2.png";  // your warm icon/image
   } else if (temp < 20) {
-    return "img/icon3.png";
+    return "icon3.png";
   } else if (temp < 30) {
-    return "img/icon4.png";
+    return "icon4.png";
   } else {
-    return "img/icon5.png";
+    return "icon5.png";
   }
 }
 
